@@ -1,0 +1,146 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Danh sách địa chỉ người dùng</h4></li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="form-group" style="display: flex;">
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1">Hiển thị</span>
+      <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+        <option value="20">20</option>
+        <option value="40">40</option>
+        <option value="80">80</option>
+      </select>
+      <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+    </div>
+    <div  style="display:flex;align-items: baseline;margin: 0 30px;">
+      <span for="exampleFormControlSelect1" style="font-weight: bold;">Sắp xếp</span>
+      <select class="form-control" (change)="onChanges($event.target.value)" style="width:180px;margin-left:10px">
+        <option value="">---- chọn -----</option>
+        <option value="addressid_asc">Sắp xếp theo id tăng dần</option>
+        <option value="addressid_desc">Sắp xếp theo id giảm dần</option>
+        <option value="address_asc">Sắp xếp theo ký tự từ Z-A</option>
+        <option value="address_desc">Sắp xếp theo ký tự từ Z-A</option>
+      </select>
+    </div>
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1" style="margin:0 10px;font-weight: bold;">Search</span>
+      <input type="text" class="form-control" id="myInput"  aria-describedby="emailHelp" placeholder="Enter keyword . . . ">
+    </div>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('id')">AddressId</th>
+        <th scope="col" (click) = "sortby('name')">Address</th>
+        <th scope="col">AccountId</th>
+        <th scope="col">CreatedDate</th>
+        <th scope="col">UpdatedDate</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr *ngFor="let item of listAddress | paginate: {itemsPerPage:pageSize,currentPage:p}">
+        <td>{{item.addressId}}</td>
+        <td>{{item.address}}</td>
+        <td>{{item.account.userName}}</td>
+        <td>{{item.createdDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td>{{item.updatedDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td class="td">
+          <a data-toggle="modal" data-target="#detailModal" (click)="ShowAddressDetail(item.addressId)" ><i class="fa fa-pencil-square-o" style="font-size:24px"></i></a>
+          <a href="" data-toggle="modal" data-target="#updateModal" (click)="ShowFormUpdateDetail(item.addressId)" ><i style="font-size:24px" class="fa">&#xf0c7;</i></a>
+          <a (click)="DeleteAddressAccount(item.addressId)"><i style="font-size:24px" class="fa">&#xf014;</i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls style="margin-top:30px" (pageChange)="p = $event"></pagination-controls>
+</div>
+
+ <!-- FORM DETAIL  -->
+ <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Chi tiết / địa chỉ</h4>
+      </div>
+      <form [formGroup]="formDetail" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>Id</span>
+        <input type="text" class="form-control" formControlName="addressId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Address</span>
+        <input type="text" class="form-control" formControlName="address" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+        <div class="modal-body-content">
+        <span>Account</span>
+        <input type="text" class="form-control" formControlName="accountId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày tạo</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày cập nhật</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- FORM UPDATE  -->
+ <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Cập nhật / địa chỉ</h4>
+      </div>
+      <form [formGroup]="formUpdate" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>Id</span>
+        <input type="text" class="form-control" formControlName="addressId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Address</span>
+        <input type="text" class="form-control" formControlName="address" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+       </div>
+        <div class="modal-body-content">
+        <span>Account</span>
+        <input type="text" class="form-control" formControlName="accountName" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+        <input type="hidden" class="form-control" formControlName="accountId">
+       </div>
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày tạo</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày cập nhật</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" (click)="onSubmitFromUpdate($event)" class="btn btn-warning" data-dismiss="modal">Cập nhật</button>
+      </div>
+      </div>
+    </div>
+  </div>

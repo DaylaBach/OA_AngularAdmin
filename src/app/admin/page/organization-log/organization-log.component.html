@@ -1,0 +1,139 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Lịch sử tin nhắn</h4></li>
+  </ol>
+</nav>
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb-children">
+      <li class="breadcrumb-item active" aria-current="page"><h4>Lọc kết quả</h4></li>
+    </ol>
+  </nav>
+  <div class="content">
+    <div class="row">
+      <form [formGroup]="infoForm"  method="post" role="form"  (ngSubmit)="onSubmit()">
+        <div class="col-md-6" style="display: contents;">
+           <div class="row" style="padding: 10px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Đơn vị / pháp nhân</span>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" formControlName="unitId">
+                  <option *ngFor="let item of listOrganization" value="{{item.unitID}}">{{item.description}}</option>
+                </select>
+            </div>
+           </div>
+
+           <div class="row"  style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>BrandName</span>
+            </div>
+            <div class="col-md-3">
+              <input type="text" class="form-control" formControlName="brandName" placeholder="Enter brandName" >
+            </div>
+           </div>
+
+           <div class="row" style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Từ ngày</span>
+            </div>
+
+              <div class="col-md-3" style="width:190px">
+                  <input type="date"  class="form-control" formControlName="fromDate">
+              </div>
+              <div class="row">
+              <div class="col-md-3"  style="width:190px">
+                <input type="date"  class="form-control" formControlName="toDate">
+              </div>
+            </div>
+           </div>
+
+           <div class="row"  style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Số diện thoại</span>
+            </div>
+            <div class="col-md-3">
+              <input type="text" class="form-control" formControlName="phoneNumber"  placeholder="Enter phoneNumber . . ." >
+            </div>
+           </div>
+
+           <div class="row" style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Trạng thái</span>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" formControlName="status">
+                  <option value="">Tất cả</option>
+                  <option *ngFor="let item of listStatus" value="{{item.statusId}}">{{item.statusName}}</option>
+                </select>
+            </div>
+           </div>
+
+           <div class="row" style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Telco</span>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" formControlName="telco">
+                  <option value="">Tất cả</option>
+                  <option *ngFor="let item of listTelco" value="{{item.telco}}">{{item.telco}}</option>
+                </select>
+            </div>
+           </div>
+
+           <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-children-end">
+              <div class="row" style="margin-top:10px">
+                  <div class="button" >
+                    <button (click)="exportexcel()" style="padding:10px 15px;background-color: #c49f47;border: none;" class="btn btn-primary"><i style="padding: 0 4px;" class="fa fa-check"></i>Xuất báo cáo </button>
+                    <button type="submit" style="background-color: #26a69a;border: none;margin-left: 10px;" class="btn btn-info"><i style="padding: 0 4px;" class="fa fa-check"></i>Tìm Kiếm</button>
+                  </div>
+               </div>
+            </ol>
+          </nav>
+        </div>
+      </form>
+     </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="form-group" style="display:flex;align-items: baseline;">
+    <span for="exampleFormControlSelect1">Hiển thị</span>
+    <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+      <option value="20">20</option>
+      <option value="40">40</option>
+      <option value="80">80</option>
+    </select>
+    <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('smS_ID')"> Mã tin nhắn &nbsp;<i class="fa fa-sort"></i></th>
+        <th scope="col" style="width:200px" (click) = "sortby('description')">Đơn vị / Pháp nhân  &nbsp; <i class="fa fa-sort"></i></th>
+        <th scope="col">Thời điểm tiếp nhận</th>
+        <th scope="col">Thời điểm phản hồi</th>
+        <th scope="col">Số điện thoại</th>
+        <th scope="col">Telco</th>
+        <th scope="col">BrandName</th>
+        <th scope="col">Nội dung tin nhắn</th>
+        <th scope="col">Trạng thái</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listLogOrganizations | orderBy: key: reverse | paginate: {itemsPerPage:pageSize,currentPage:p};">
+        <td>{{item.smS_ID}}</td>
+        <td style="color:red">{{item.description}}</td>
+        <td>{{item.requestTime}}</td>
+        <td>{{item.responseTime}}</td>
+        <td>{{item.phoneNumber}}</td>
+        <td>{{item.telco}}</td>
+        <td>{{item.brandName}}</td>
+        <td style="word-break: break-all;width:300px">{{item.content}}</td>
+        <td>{{item.status}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>

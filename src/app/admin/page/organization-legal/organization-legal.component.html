@@ -1,0 +1,230 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding: 0 10px" class="fa">&#xf007;</i>Danh sách đơn vị / Pháp nhân</h4></li>
+    </ol>
+  </nav>
+  <div *ngIf="checkAuthen == true">
+  <div  class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb-children">
+        <li class="breadcrumb-item active" aria-current="page"><h4>Lọc kết quả</h4></li>
+      </ol>
+    </nav>
+    <div class="content">
+      <div class="row">
+        <form [formGroup]="myGroup" method="post" role="form" (ngSubmit)="onSubmit()">
+          <div class="col-md-6" style="display: contents;">
+
+             <div class="row"  style="padding: 5px;">
+              <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+                <span>Tìm kiếm</span>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="text" formControlName="name"  [(ngModel)] = "name" (ngModelChange)="Search()"  placeholder="Nhập từ khóa . . ."/>
+              </div>
+             </div>
+
+             <div class="row" style="padding: 5px;">
+              <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+                <span>Trạng thái</span>
+              </div>
+              <div class="col-md-3">
+                  <select class="form-control" id="exampleFormControlSelect1" formControlName="status">
+                    <option value="">Tất cả</option>
+                    <option *ngFor="let item of listStatus" value="{{item.statusId}}">{{item.statusName}}</option>
+                  </select>
+              </div>
+             </div>
+
+             <nav aria-label="breadcrumb">
+              <ol class="breadcrumb-children-end">
+                <div class="row" style="margin-top:10px">
+                    <div class="button" >
+                      <button type="submit" style="background-color: #26a69a;border: none;" class="btn btn-info"><i style="padding: 0 4px;" class="fa fa-check"></i>Tìm Kiếm</button>
+                      <span style="padding:10px 15px;background-color: #c49f47;border: none;margin:0 10px" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1"><i style="font-size:15px;padding: 0 4px" class="fa">&#xf067;</i>Thêm mới</span>
+                    </div>
+                 </div>
+              </ol>
+            </nav>
+          </div>
+        </form>
+       </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="form-group" style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1">Hiển thị</span>
+      <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+        <option value="20">20</option>
+        <option value="40">40</option>
+        <option value="80">80</option>
+      </select>
+      <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+    </div>
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th scope="col" (click) = "sortby('unitID')">Tên Đơn vị / Pháp nhân &nbsp;<i class="fa fa-sort"></i></th>
+          <th scope="col" (click) = "sortby('description')">Mô tả &nbsp;<i class="fa fa-sort"></i></th>
+          <th scope="col">Trạng thái</th>
+          <th scope="col" >Thao tác</th>
+          <th scope="col" ></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listLogOrganizations | orderBy: key: reverse | paginate: {itemsPerPage:pageSize,currentPage:p};">
+          <td>{{item.unitID}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.active}}</td>
+          <td class="hn">
+            <a href="" style="margin-left: 0;" (click)="ShowUnitDetail(item.unitID)" data-toggle="modal" data-target="#exampleModal">Chi tiết</a>
+          </td>
+          <td class="hn">
+            <a  href="" (click)="ShowCateDetail(item.unitID)" data-toggle="modal" data-target="#exampleModal2">Update</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+    <!-- FROM CHI TIẾT UNITID -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border-radius: 5px;">
+          <div class="modal-header">
+          <h4 class="modal-title" id="exampleModalLabel">Chi tiết Đối tượng/Pháp nhân</h4>
+          </div>
+          <form [formGroup]="formDetail" method="post" role="form">
+          <div class="modal-body">
+           <div class="modal-body-content">
+            <span>Tên Đối tượng / Pháp nhân</span>
+            <input type="text" class="form-control" formControlName="unitId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+           </div>
+           <div class="modal-body-content">
+            <span>Mô tả</span>
+            <input type="text" class="form-control" formControlName="description" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+           </div>
+            <div class="modal-body-content">
+            <span>Trạng thái</span>
+            <input type="text" class="form-control" formControlName="status" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+           </div>
+           <div class="container-fluid">
+            <div class="row">
+              <div style="padding-left: 0;" class="col-md-6" >
+                <span>Ngày tạo</span>
+                <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+              <div style="padding-right: 0;" class="col-md-6" >
+                <span>Người tạo</span>
+                <input type="text" class="form-control"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+            </div>
+           </div>
+           <div style="margin-top:10px" class="container-fluid">
+            <div class="row">
+              <div style="padding-left: 0;" class="col-md-6" >
+                <span>Ngày cập nhật</span>
+                <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+              <div style="padding-right: 0;" class="col-md-6" >
+                <span>Người cập nhật</span>
+                <input type="text" class="form-control" style="margin:10px 0;border-radius:3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+            </div>
+           </div>
+          </div>
+          </form>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FROM UPDATE  -->
+      <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content" style="border-radius: 5px;">
+            <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel">Cập nhật Đối tượng/Pháp nhân</h4>
+            </div>
+            <form [formGroup]="formUpdate" method="post" role="form" class="login100-form validate-form">
+              <div class="modal-body">
+              <div class="modal-body-content">
+                <span>Tên Đối tượng / Pháp nhân</span>
+                <input type="text" class="form-control" formControlName="unitId"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+              <div class="modal-body-content">
+                <span>Mô tả</span>
+                <input type="text" class="form-control" formControlName="description"   style="margin:10px 0;border-radius: 3px;" placeholder="Tối đa 500 ký tự."  >
+              </div>
+              <div *ngIf="u.description.dirty || u.description.touched">
+                <div *ngIf="u.description.errors">
+                  <span class="err" *ngIf="u.description.errors.required">Bạn chưa nhập gì </span>
+                  <span class="err" *ngIf="u.description.errors.maxlength">Nhập quá kí tự cho phép</span>
+                </div>
+              </div>
+                <div class="modal-body-content">
+                <span>Trạng thái</span>
+                <select class="form-control" id="exampleFormControlSelect1" formControlName="status" style="margin:10px 0;border-radius: 3px;">
+                  <option *ngFor="let item of listStatus" value="{{item.statusId}}">{{item.statusName}}</option>
+                </select>
+              </div>
+              </div>
+            </form>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+              <button type="submit"  (click)="onSubmitFromUpdate($event)" class="btn btn-warning" data-dismiss="modal">Cập nhật</button>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      <!-- FROM THÊM MỚI  -->
+      <form [formGroup]="infoForm"  method="post" role="form" class="login100-form validate-form">
+        <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 5px;">
+              <div class="modal-header">
+              <h4 class="modal-title" id="exampleModalLabel">Thêm mới Đối tượng/Pháp nhân</h4>
+              </div>
+              <div class="modal-body">
+              <div class="modal-body-content">
+                <span>Tên Đối tượng / Pháp nhân</span>
+                <input type="text" class="form-control" formControlName="unitId" style="margin:10px 0;border-radius: 3px;" placeholder="Chỉ nhập kí tự [a-zA-Z_0-9] tối đa 50 kí tự" >
+              </div>
+              <div *ngIf="f.unitId.dirty || f.unitId.touched">
+                <div *ngIf="f.unitId.errors">
+                  <span class="err" *ngIf="f.unitId.errors.required">Bạn chưa nhập gì </span>
+                  <span class="err" *ngIf="f.unitId.errors.pattern">Nhập sai định dạng cho phép</span>
+                  <span class="err" *ngIf="f.unitId.errors.maxlength">Nhập quá kí cho phép </span>
+                </div>
+              </div>
+              <div style="margin-top:10px" class="modal-body-content">
+                <span>Mô tả</span>
+                <input type="text" class="form-control" formControlName="brandName" style="margin:10px 0;border-radius: 3px;" placeholder="Tối đa 500 ký tự." >
+              </div>
+              <div *ngIf="f.brandName.dirty || f.brandName.touched">
+                <div *ngIf="f.brandName.errors">
+                  <span class="err" *ngIf="f.brandName.errors.required">Bạn chưa nhập gì </span>
+                  <span class="err" *ngIf="f.brandName.errors.maxlength">Nhập quá kí tự cho phép</span>
+                </div>
+              </div>
+              <div class="modal-body-content">
+                <span>Trạng thái</span>
+                  <input type="checkbox" class="form-check-input" formControlName="status" value="false" style="margin-left:10px;margin-top:5px">
+              </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" (click)="onReset2($event)" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit"  (click)="onSubmitFromCreate($event)" class="btn btn-primary" data-dismiss="modal">Thêm mới</button>
+              </div>
+              </div>
+            </div>
+          </div>
+        </form>
+  </div>
+</div>
+<div *ngIf="checkAuthen == false">
+  <h3 style="color:red;text-align: center;font-family: system-ui;">{{message}}!</h3>
+</div>

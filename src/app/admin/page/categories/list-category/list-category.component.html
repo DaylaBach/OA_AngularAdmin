@@ -1,0 +1,170 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Danh sách danh muc</h4></li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="form-group" style="display: flex;">
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1">Hiển thị</span>
+      <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="20">30</option>
+      </select>
+      <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+    </div>
+    <div  style="display:flex;align-items: baseline;margin: 0 30px;">
+      <span for="exampleFormControlSelect1" style="font-weight: bold;">Sắp xếp</span>
+      <select class="form-control" (change)="onChanges($event.target.value)" style="width:180px;margin-left:10px">
+        <option value="">----Chọn ----</option>
+        <option value="sortid_asc">Sắp xếp theo id tăng dần</option>
+        <option value="sortid_desc">Sắp xếp theo id giảm dần</option>
+        <option value="sortname_asc">Sắp xếp theo ký tự từ Z-A</option>
+        <option value="sortname_desc">Sắp xếp theo ký tự từ Z-A</option>
+
+      </select>
+    </div>
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1" style="margin:0 10px;font-weight: bold;">Search</span>
+      <input type="text" class="form-control" id="myInput"  aria-describedby="emailHelp" placeholder="Enter keyword . . . ">
+    </div>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('id')">CategoryId</th>
+        <th scope="col" (click) = "sortby('name')">CategoryName</th>
+        <th scope="col">Status</th>
+        <th scope="col">Image</th>
+        <th scope="col">CreatedDate</th>
+        <th scope="col">UpdatedDate</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr *ngFor="let item of listCategory | paginate: {itemsPerPage:pageSize,currentPage:p}">
+        <td>{{item.categoryId}}</td>
+        <td>{{item.categoryName}}</td>
+        <td>
+          <small _ngcontent-aye-c2="" class="label bg-green">{{item.status == true?"kích hoạt":""}}</small>
+          <small _ngcontent-aye-c2="" class="label bg-red">{{item.status == false?"chưa kích hoạt":""}}</small>
+         </td>
+        <td><img style="width: 50px;height: 50px;" src="http://localhost:19776/api/Category/get-category-image?image={{item.image}}" alt=""></td>
+        <td>{{item.createdDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td>{{item.updatedDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td class="td">
+          <a href=""  data-toggle="modal" data-target="#detailModal" (click)="ShowCateDetail(item.categoryId)" ><i class="fa fa-pencil-square-o" style="font-size:24px"></i></a>
+          <a href="" data-toggle="modal" data-target="#updateModal" (click)="ShowFormUpdateDetail(item.categoryId)"><i style="font-size:24px" class="fa">&#xf0c7;</i></a>
+          <a (click)="DeleteCategory(item.categoryId)"><i style="font-size:24px" class="fa">&#xf014;</i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls style="margin-top:30px" (pageChange)="p = $event"></pagination-controls>
+</div>
+
+ <!-- FORM DETAIL  -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Chi tiết / danh mục</h4>
+      <img style="width: 150px;height: 150px;text-align: center;" formControlName="image" src="http://localhost:19776/api/Category/get-category-image?image={{image}}">
+      </div>
+      <form [formGroup]="formDetail" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>CategotyId</span>
+        <input type="text" class="form-control" formControlName="categoryId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>CategoryName</span>
+        <input type="text" class="form-control" formControlName="categoryName" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+        <div class="modal-body-content">
+        <span>Trạng thái</span>
+        <input type="text" class="form-control" formControlName="status" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày tạo</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày cập nhật</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FORM UPDATE  -->
+  <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="border-radius: 5px;">
+        <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Cập nhật / danh mục</h4>
+        </div>
+        <form [formGroup]="formUpdate" method="post" role="form">
+          <div class="modal-body">
+           <div class="modal-body-content">
+            <span>CategotyId</span>
+            <input type="text" class="form-control" formControlName="categoryId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+           </div>
+           <div class="modal-body-content">
+            <span>CategoryName</span>
+            <input type="text" class="form-control" formControlName="categoryName" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . ." >
+           </div>
+            <div class="modal-body-content">
+            <span>Trạng thái</span>
+            <div class="radio">
+              <label>
+                <input type="radio" formControlName ="status" id="input" value="true">
+                  hiện
+              </label>
+            </div>
+
+            <div class="radio">
+              <label for="">
+                <input type="radio" formControlName ="status" id="input" value="false">
+                  ẩn
+              </label>
+            </div>
+           </div>
+           <div class="modal-body-content">
+            <span>Image</span>
+            <input type="file" class="form-control" (change)="onFileChange($event)" formControlName="image" style="margin:10px 0;border-radius: 3px;" >
+            <img *ngIf="selectedImage"  style="width: 150px;height: 150px" [src]="selectedImage" alt="Selected Image">
+           </div>
+           <img *ngIf="eventOccurred" style="width: 150px;height: 150px;text-align:  center;" formControlName="imageold"  src="http://localhost:19776/api/Category/get-category-image?image={{imageold}}">
+           <div class="container-fluid">
+            <div class="row">
+              <div style="padding-left: 0;" class="col-md-6" >
+                <span>Ngày tạo</span>
+                <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+              <div style="padding-left: 0;" class="col-md-6" >
+                <span>Ngày cập nhật</span>
+                <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+              </div>
+            </div>
+           </div>
+          </div>
+          </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="button"   (click)="onSubmitFromUpdate($event)" class="btn btn-warning" data-dismiss="modal">Cập nhật</button>
+        </div>
+        </div>
+      </div>
+    </div>

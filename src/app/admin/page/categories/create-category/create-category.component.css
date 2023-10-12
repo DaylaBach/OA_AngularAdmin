@@ -1,0 +1,14 @@
+.modal-body-content{
+  margin: 30px 0;
+}
+.err{
+  color:#e7898c;
+  display: block;
+}
+img {
+  max-width: 100%;
+  max-height: 300px;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}

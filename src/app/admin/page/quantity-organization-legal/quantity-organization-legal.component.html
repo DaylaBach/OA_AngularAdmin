@@ -1,0 +1,95 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Thống kê sản lượng tin nhắn theo Đơn vị/Pháp nhân</h4></li>
+  </ol>
+</nav>
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb-children">
+      <li class="breadcrumb-item active" aria-current="page"><h4>Lọc kết quả theo thời gian</h4></li>
+    </ol>
+  </nav>
+  <div class="content">
+    <div class="row">
+      <form [formGroup]="infoForm"  method="post" role="form"  (ngSubmit)="onSubmit()">
+        <div class="col-md-6" style="display: contents;">
+          <div class="row"  style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>BrandName</span>
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="text" formControlName="name"  [(ngModel)] = "name" (ngModelChange)="Search()"  placeholder="Nhập từ khóa . . ."/>
+            </div>
+           </div>
+
+           <div class="row" style="padding: 5px;">
+            <div style="display: flex;align-items: center;height: 40px;justify-content: end;" class="col-md-3">
+              <span>Từ ngày</span>
+            </div>
+
+              <div class="col-md-3" style="width:190px">
+                  <input type="date" class="form-control"  placeholder="dd/MM/yyyy" >
+              </div>
+              <div class="row">
+              <div class="col-md-3"  style="width:190px">
+                <input type="date" class="form-control"  placeholder="dd/MM/yyyy" >
+              </div>
+            </div>
+           </div>
+
+           <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-children-end">
+              <div class="row" style="margin-top:10px">
+                  <div class="button" >
+                    <button (click)="exportexcel()"  style="padding:10px 15px;background-color: #c49f47;border: none;" class="btn btn-primary"><i style="padding: 0 4px;" class="fa fa-check"></i>Xuất báo cáo </button>
+                    <button type="submit" style="background-color: #26a69a;border: none;margin-left: 10px;" class="btn btn-info"><i style="padding: 0 4px;" class="fa fa-check"></i>Tìm Kiếm</button>
+                  </div>
+
+               </div>
+            </ol>
+          </nav>
+        </div>
+      </form>
+     </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="form-group" style="display:flex;align-items: baseline;">
+    <span for="exampleFormControlSelect1">Hiển thị</span>
+    <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+      <option value="20">20</option>
+      <option value="40">40</option>
+      <option value="80">80</option>
+    </select>
+    <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('id')">Mã Đơn vị/Pháp nhân</th>
+        <th scope="col" (click) = "sortby('name')">Viettel</th>
+        <th scope="col">Mobifone</th>
+        <th scope="col">Vinaphone</th>
+        <th scope="col">Vietnamobile</th>
+        <th scope="col">Gtel</th>
+        <th scope="col">ITelecom</th>
+        <th scope="col">Reddi</th>
+        <th scope="col">Sum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listOrganizationLegal | paginate: {itemsPerPage:pageSize,currentPage:p}" [ngClass]="{'bold': item === last}">
+        <td>{{item.time}}</td>
+        <td>{{item.viettel}}</td>
+        <td>{{item.mobifone}}</td>
+        <td>{{item.vinaphone}}</td>
+        <td>{{item.vietnamobile}}</td>
+        <td>{{item.gtel}}</td>
+        <td>{{item.iTelecom}}</td>
+        <td>{{item.reddi}}</td>
+        <td>{{item.sum}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls style="margin-top:30px" (pageChange)="p = $event"></pagination-controls>
+</div>

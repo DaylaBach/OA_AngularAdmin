@@ -1,0 +1,166 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Danh sách loại hình thanh toán</h4></li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="form-group" style="display: flex;">
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1">Hiển thị</span>
+      <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+        <option value="20">20</option>
+        <option value="40">40</option>
+        <option value="80">80</option>
+      </select>
+      <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+    </div>
+    <div  style="display:flex;align-items: baseline;margin: 0 30px;">
+      <span for="exampleFormControlSelect1" style="font-weight: bold;">Sắp xếp</span>
+      <select class="form-control" (change)="onChanges($event.target.value)" style="width:180px;margin-left:10px">
+        <option value="">------ Chọn -----</option>
+        <option value="paymentid_asc">Sắp xếp theo id tăng dần</option>
+        <option value="paymentid_desc">Sắp xếp theo id giảm dần</option>
+        <option value="create_asc">Sắp xếp theo ký tự từ Z-A</option>
+        <option value="create_desc">Sắp xếp theo ký tự từ Z-A</option>
+      </select>
+    </div>
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1" style="margin:0 10px;font-weight: bold;">Search</span>
+      <input type="text" class="form-control" id="myInput"  aria-describedby="emailHelp" placeholder="Enter keyword . . . ">
+    </div>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('id')">PaymentId</th>
+        <th scope="col" (click) = "sortby('name')">Type</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Bank</th>
+        <th scope="col">CreatedDate</th>
+        <th scope="col">UpdatedDate</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr *ngFor="let item of listPayment | paginate: {itemsPerPage:pageSize,currentPage:p}">
+        <td>{{item.paymentId}}</td>
+        <td>{{item.type}}</td>
+        <td>{{item.amount}}</td>
+        <td>{{item.bank}}</td>
+        <td>{{item.createdDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td>{{item.updatedDate | date:'dd-MM-yyyy hh:ss'}}</td>
+        <td class="td">
+          <a href="" data-toggle="modal" data-target="#detailModal" (click)="ShowPaymentDetail(item.paymentId)"><i class="fa fa-pencil-square-o" style="font-size:24px"></i></a>
+          <a href="" data-toggle="modal" data-target="#updateModal" (click)="ShowFormUpdateDetail(item.paymentId)"><i style="font-size:24px" class="fa">&#xf0c7;</i></a>
+          <a (click)="DeletePayment(item.paymentId)"><i style="font-size:24px" class="fa">&#xf014;</i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls style="margin-top:30px" (pageChange)="p = $event"></pagination-controls>
+</div>
+
+
+ <!-- FORM DETAIL  -->
+ <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Chi tiết / thanh toán</h4>
+      </div>
+      <form [formGroup]="formDetail" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>Id</span>
+        <input type="text" class="form-control" formControlName="paymentId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Kiểu thanh toán</span>
+        <input type="text" class="form-control" formControlName="type" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+        <div class="modal-body-content">
+        <span>Lượng thanh toán</span>
+        <input type="text" class="form-control" formControlName="amount" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Ngân hàng</span>
+        <input type="text" class="form-control" formControlName="bank" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="" readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Đơn hàng</span>
+        <input type="text" class="form-control" formControlName="orderId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày tạo</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày cập nhật</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- FORM UPDATE  -->
+ <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Cập nhật / thanh toán</h4>
+      </div>
+      <form [formGroup]="formUpdate" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>Id</span>
+        <input type="text" class="form-control" formControlName="paymentId" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Kiểu thanh toán</span>
+        <input type="text" class="form-control" formControlName="type" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+       </div>
+       <div class="modal-body-content">
+        <span>Lượng thanh toán</span>
+        <input type="number" class="form-control" formControlName="amount" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+       </div>
+       <div class="modal-body-content">
+        <span>Đơn hàng</span>
+          <select formControlName="orderId" id="input" class="form-control" required="required">
+            <option *ngFor="let item of listOrder" value="{{item.orderId}}">{{item.email}} : {{item.totalPrice}}</option>
+          </select>
+       </div>
+       <div class="modal-body-content">
+        <span>Ngân hàng</span>
+        <input type="text" class="form-control" formControlName="bank" style="margin:10px 0;border-radius: 3px;" placeholder="">
+       </div>
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày tạo</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Ngày cập nhật</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" (click)="onSubmitFromUpdate($event)" class="btn btn-warning" data-dismiss="modal">Cập nhật</button>
+      </div>
+      </div>
+    </div>
+  </div>

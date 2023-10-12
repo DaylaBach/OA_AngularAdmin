@@ -1,0 +1,117 @@
+<aside class="main-sidebar" style="padding-top: 40px;">
+  <!-- sidebar: style can be found in sidebar.less -->
+  <section class="sidebar">
+    <!-- Sidebar user panel -->
+    <div class="user-panel">
+      <div class="pull-left image">
+        <img src="./assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+      </div>
+      <div class="pull-left info">
+        <p>{{userName}}</p>
+        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+      </div>
+    </div>
+
+    <!-- /.search form -->
+    <!-- sidebar menu: : style can be found in sidebar.less -->
+    <ul class="sidebar-menu" data-widget="tree">
+      <li class="header">MAIN NAVIGATION</li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-list-alt"></i> <span >DANH MỤC</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/category/list-category" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách danh mục</a></li>
+          <li><a routerLink="/category/create-category" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới danh mục</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-product-hunt"></i> <span >SẢN PHẨM</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/product/list-product" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách sản phẩm</a></li>
+          <li><a routerLink="/product/create-product" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới sản phẩm</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-map-marker"></i> <span >ĐỊA CHỈ NGƯỜI DÙNG</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/address/list-address" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách địa chỉ người dùng</a></li>
+          <li><a routerLink="/address/create-address" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-comments-o"></i> <span >COMMENT</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/comment/list-comment" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách comment</a></li>
+          <li><a routerLink="/comment/create-comment" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-credit-card"></i> <span >LOẠI HÌNH THANH TOÁN</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/payment/list-payment" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Loại hình thành toán</a></li>
+          <li><a routerLink="/payment/create-payment" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-shopping-cart"></i> <span>ĐƠN HÀNG</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/order/list-order" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách đơn hàng</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-user-o"></i> <span >TÀI KHOẢN NGƯỜI DÙNG</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/account/list-account" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Tài khoản người dùng</a></li>
+          <li><a routerLink="/account/create-account" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới</a></li>
+        </ul>
+      </li>
+      <li class="active treeview" style="word-wrap: normal">
+        <a href="#" >
+          <i class="fa fa-user-o"></i> <span >TÀI KHOẢN ADMIN</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a routerLink="/user/list-user" style="font-family: math;"><i style="color:white" class="fa fa-book"></i>Danh sách tài khoản admin</a></li>
+          <li><a routerLink="/user/create-user" style="font-family: math;"><i style="color:white" class="fa fa-plus-circle"></i>Thêm mới</a></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+  <!-- /.sidebar -->
+</aside>

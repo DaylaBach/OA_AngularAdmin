@@ -1,0 +1,50 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Thêm mới bình luận</h4></li>
+    </ol>
+  </nav>
+
+    <div class="container" >
+      <h1 style="color:rgb(12, 1, 1);font-family: serif;">THÊM MỚI COMMENT</h1>
+      <hr/>
+      <form [formGroup]="infoForm"  method="post" role="form" class="login100-form validate-form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+
+            <div class="wrap-input100 validate-input">
+              <span style="font-weight: bold;">Nội dung</span>
+              <input type="text" class="form-control" formControlName="question" style="margin:10px 0;border-radius: 3px;" placeholder="" >
+            </div>
+            <div *ngIf="f.question.dirty || f.question.touched">
+                <div *ngIf="f.question.errors">
+                <span class="err" *ngIf="f.question.errors.required">Bạn chưa nhập gì </span>
+                </div>
+            </div>
+
+            <div class="wrap-input100 validate-input">
+              <span style="font-weight: bold;">Tài khoản</span>
+              <select formControlName="accountId" style="margin:10px 0;border-radius: 3px;" class="form-control" required="required">
+                <option *ngFor="let item of listAccount" value="{{item.id}}">{{item.userName}}</option>
+              </select>
+            </div>
+            <div *ngIf="f.accountId.dirty || f.accountId.touched">
+              <div *ngIf="f.accountId.errors">
+              <span class="err" *ngIf="f.accountId.errors.required">Bạn chưa nhập gì </span>
+              </div>
+          </div>
+
+            <div class="wrap-input100 validate-input">
+              <span style="font-weight: bold;">Sản phẩm</span>
+              <select formControlName="productId" style="margin:10px 0;border-radius: 3px;" class="form-control" required="required">
+                <option *ngFor="let item of listProduct" value="{{item.productId}}">{{item.productName}}</option>
+              </select>
+            </div>
+            <div *ngIf="f.productId.dirty || f.productId.touched">
+              <div *ngIf="f.productId.errors">
+              <span class="err" *ngIf="f.productId.errors.required">Bạn chưa nhập gì </span>
+              </div>
+          </div>
+
+            <div class="modal-footer">
+                <button type="submit"  class="btn btn-primary" data-dismiss="modal">Thêm mới</button>
+            </div>
+        </form>
+    </div>

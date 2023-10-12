@@ -1,0 +1,78 @@
+<style>
+  .limiter {
+      background: url(https://mega.com.vn/media/news/0106_hinh-nen-4k-may-tinh5.jpg);
+  }
+</style>
+<router-outlet></router-outlet>
+<div class="limiter">
+  <div class="container-login100">
+      <div class="wrap-login100" style="padding: 24px;width: 430px;">
+          <form [formGroup]="infoForm"  method="post" role="form" class="login100-form validate-form" (ngSubmit)="onSubmit()" >
+              <span class="login100-form-title">
+               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRD9watd98GuxuplYkqW5OizlYfQa_Iy4_3g&usqp=CAU" style="width:100px" alt="" >
+              </span>
+              <span><h3 style="margin:20px;text-align: center;line-height: inherit;color:#4db3a5">HỆ THỐNG QUẢN LÝ APP BÁN HÀNG</h3> </span>
+              <div class="wrap-input100 validate-input">
+                  <span class="label-input100"><b>Email</b></span>
+                  <input class="form-control " type="text" required formControlName="email" placeholder="Enter your user . . . ">
+              </div>
+              <div *ngIf="f.email.dirty || f.email.touched">
+                <div *ngIf="f.email.errors">
+                  <span class="err" *ngIf="f.email.errors.required">Bạn chưa nhập gì </span>
+                  <span class="err" *ngIf="f.email.errors.maxlength">Nhập quá kí tự cho phép</span>
+                </div>
+              </div>
+
+              <div style="margin-top:30px" class="wrap-input100 validate-input">
+                  <span class="label-input100"><b>Password</b></span>
+                  <input class="form-control " type="password" formControlName="password" required placeholder="Enter your password . . .">
+              </div>
+              <div *ngIf="f.password.dirty || f.password.touched">
+                <div *ngIf="f.password.errors">
+                  <span class="err" *ngIf="f.password.errors.required">Bạn chưa nhập gì </span>
+                  <span class="err" *ngIf="f.password.errors.maxlength">Nhập quá kí tự cho phép</span>
+                </div>
+              </div>
+
+              <div class="text-right p-t-8 p-b-31">
+                  <a asp-controller="Login" asp-action="Register">
+                    Forgot password ?
+                  </a>
+              </div>
+
+              <p style="color:#F3565D;text-align:center">
+               {{message}}
+              </p>
+
+              <div class="container-login100-form-btn" style="    margin-top: 20px;">
+                <div class="wrap-login100-form-btn">
+                    <div class="login100-form-bgbtn"></div>
+                    <button type="submit" class="login100-form-btn">
+                        Login
+                    </button>
+                </div>
+            </div>
+              <div class="txt1 text-center p-t-40 p-b-20">
+                  <span>
+                      Or Sign Up Using
+                  </span>
+              </div>
+
+              <div class="flex-c-m">
+                  <a href="#" class="login100-social-item bg1">
+                      <i class="fa fa-facebook"></i>
+                  </a>
+                  <a href="#" class="login100-social-item bg2">
+                      <i class="fa fa-twitter"></i>
+                  </a>
+                  <a href="#" class="login100-social-item bg3">
+                      <i class="fa fa-google"></i>
+                  </a>
+              </div>
+
+          </form>
+      </div>
+  </div>
+</div>
+<div id="dropDownSelect1"></div>
+

@@ -1,0 +1,39 @@
+.breadcrumb{
+  background-color: #95A5A6;
+  border-radius: 0px;
+}
+
+.breadcrumb-item{
+  color: aliceblue;
+}
+.container{
+  height: 310px;
+  width: 98%;
+  border: 1px solid #c49f47;
+  margin:0 18px;
+  padding: 0;
+  border-radius: 5px;
+}
+.container-fluid{
+  margin-top: 30px;
+}
+.breadcrumb-children {
+  background-color: #c49f47;
+  padding:10px
+}
+
+.content{
+  text-align: center
+}
+.breadcrumb-children-end{
+  border-top: 1px solid rgb(179, 179, 179);
+  margin-top:50px
+}
+.button{
+  display: flex;
+  margin-left: 435px;
+}
+.bold {
+  color:rgb(233, 49, 49);
+  font-weight: 600;
+}

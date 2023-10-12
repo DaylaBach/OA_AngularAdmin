@@ -1,0 +1,185 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Danh sách tài khoản Admin</h4></li>
+  </ol>
+</nav>
+<div class="container-fluid">
+  <div class="form-group" style="display: flex;">
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1">Hiển thị</span>
+      <select class="form-control" (change)="onChange($event.target.value)" style="width:80px;margin-left:10px">
+        <option value="20">20</option>
+        <option value="40">40</option>
+        <option value="80">80</option>
+      </select>
+      <span for="exampleFormControlSelect1" style="margin-left: 10px;">bản ghi</span>
+    </div>
+    <div  style="display:flex;align-items: baseline;margin: 0 30px;">
+      <span for="exampleFormControlSelect1" style="font-weight: bold;">Sắp xếp</span>
+      <select class="form-control" (change)="onChanges($event.target.value)" style="width:180px;margin-left:10px">
+        <option value="">------ Chọn -----</option>
+        <option value="userid_asc">Sắp xếp theo id tăng dần</option>
+        <option value="userid_desc">Sắp xếp theo id giảm dần</option>
+        <option value="username_asc">Sắp xếp theo ký tự từ Z-A</option>
+        <option value="username_desc">Sắp xếp theo ký tự từ Z-A</option>
+      </select>
+    </div>
+    <div  style="display:flex;align-items: baseline;">
+      <span for="exampleFormControlSelect1" style="margin:0 10px;font-weight: bold;">Search</span>
+      <input type="text" class="form-control" id="myInput"  aria-describedby="emailHelp" placeholder="Enter keyword . . . ">
+    </div>
+  </div>
+  <table class="table table-hover table-bordered" id="excel-table">
+    <thead>
+      <tr>
+        <th scope="col" (click) = "sortby('id')">ID</th>
+        <th scope="col" (click) = "sortby('name')">UserName</th>
+
+        <th scope="col">Email</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Address</th>
+        <th scope="col">Birthday</th>
+        <th scope="col">Avatar</th>
+        <th scope="col">Sate</th>
+        <th scope="col">IsLock</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr *ngFor="let item of listUsers | paginate: {itemsPerPage:pageSize,currentPage:p}" [ngClass]="{'bold': item === last}">
+        <td>{{item.id}}</td>
+        <td>{{item.userName}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.phone}}</td>
+        <td>{{item.address}}</td>
+        <td>{{item.birthday}}</td>
+        <td><img style="width: 50px;height: 50px;" src="http://localhost:19776/api/Account/get-account-image?image={{item.avatar}}" alt=""></td>
+        <td>{{item.sate == true ? 'Kích hoạt' : 'chưa kích hoạt'}}</td>
+        <td>{{item.isLock == false ? 'Kích hoạt' :'Tài khoản bị khóa'}}</td>
+        <td class="td">
+          <a href="" data-toggle="modal" data-target="#detailModal" (click)="ShowUserDetail(item.id)" ><i class="fa fa-pencil-square-o" style="font-size:24px"></i></a>
+          <a href="" data-toggle="modal" data-target="#updateModal" (click)="ShowFormUpdateDetail(item.id)" ><i style="font-size:24px" class="fa">&#xf0c7;</i></a>
+          <a (click)="DeleteUser(item.id)"><i style="font-size:24px" class="fa">&#xf014;</i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls style="margin-top:30px" (pageChange)="p = $event"></pagination-controls>
+</div>
+
+
+ <!-- FORM DETAIL  -->
+ <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Chi tiết / người dùng</h4>
+      <img style="width: 150px;height: 150px;text-align: center;" formControlName="avatar" src="http://localhost:19776/api/Account/get-account-image?image={{avatar}}">
+      </div>
+      <form [formGroup]="formDetail" method="post" role="form">
+      <div class="modal-body">
+       <div class="modal-body-content">
+        <span>Id</span>
+        <input type="text" class="form-control" formControlName="id" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+       <div class="modal-body-content">
+        <span>Username</span>
+        <input type="text" class="form-control" formControlName="userName" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+       </div>
+         <div class="modal-body-content">
+          <span>Email</span>
+          <input type="text" class="form-control" formControlName="email" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+         </div>
+         <div class="modal-body-content">
+          <span>Phone</span>
+          <input type="text" class="form-control" formControlName="phone" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+         </div>
+         <div class="modal-body-content">
+          <span>Address</span>
+          <input type="text" class="form-control" formControlName="address" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+         </div>
+         <div class="modal-body-content">
+          <span>birthday</span>
+          <input type="text" class="form-control" formControlName="birthday" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+         </div>
+
+       <div class="container-fluid">
+        <div class="row">
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Created Date</span>
+            <input type="text" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div style="padding-left: 0;" class="col-md-6" >
+            <span>Updated Date</span>
+            <input type="text" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+        </div>
+       </div>
+      </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+   <!-- FORM UPDATE  -->
+ <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="border-radius: 5px;">
+      <div class="modal-header">
+      <h4 class="modal-title" id="exampleModalLabel">Cập nhật / người dùng</h4>
+      </div>
+      <form  [formGroup]="formUpdate" method="post" role="form">
+        <div class="modal-body">
+          <div class="modal-body-content">
+           <span>Id</span>
+           <input type="text" class="form-control" formControlName="id" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+          </div>
+          <div class="modal-body-content">
+           <span>Username</span>
+           <input type="text" class="form-control" formControlName="userName" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+          </div>
+            <div class="modal-body-content">
+             <span>Email</span>
+             <input type="text" class="form-control" formControlName="email" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+            </div>
+            <div class="modal-body-content">
+             <span>Phone</span>
+             <input type="text" class="form-control" formControlName="phone" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+            </div>
+            <div class="modal-body-content">
+             <span>Address</span>
+             <input type="text" class="form-control" formControlName="address" style="margin:10px 0;border-radius: 3px;" placeholder="Enter . . .">
+            </div>
+
+            <div class="modal-body-content">
+              <span>Image</span>
+              <input type="file" class="form-control" (change)="onFileChange($event)" formControlName="avatar" style="margin:10px 0;border-radius: 3px;" >
+              <img *ngIf="selectedImage"  style="width: 150px;height: 150px" [src]="selectedImage" alt="Selected Image">
+             </div>
+             <img *ngIf="eventOccurred" style="width: 150px;height: 150px;text-align:  center;" formControlName="imageold"  src="http://localhost:19776/api/Account/get-account-image?image={{imageold}}">
+            <div class="container-fluid">
+              <div class="row">
+                <div style="padding-left: 0;" class="col-md-6" >
+                  <span>Created Date</span>
+                  <input type="date" class="form-control" formControlName="createdDate" style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+                </div>
+                <div style="padding-left: 0;" class="col-md-6" >
+                  <span>Updated Date</span>
+                  <input type="date" class="form-control" formControlName="updatedDate"  style="margin:10px 0;border-radius: 3px; cursor: not-allowed;" placeholder="Enter . . ." readonly>
+                </div>
+              </div>
+             </div>
+
+         </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button"   (click)="onSubmitFromUpdate($event)" class="btn btn-warning" data-dismiss="modal">Cập nhật</button>
+      </div>
+      </div>
+    </div>
+  </div>

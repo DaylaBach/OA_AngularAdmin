@@ -1,0 +1,33 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page"><h4><i style="font-size:20px;padding:0 10px" class="fa">&#xf0ac;</i>Sửa danh muc</h4></li>
+    </ol>
+  </nav>
+  
+    <div class="container" >
+      <hr/>
+      <form [formGroup]="infoForm"  method="post" role="form" class="login100-form validate-form" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+  
+        <div class="wrap-input100 validate-input">
+          <span style="font-weight: bold;">CategoryName</span>
+          <input type="text" class="form-control" formControlName="categoryName" style="margin:10px 0;border-radius: 3px;" placeholder="Chỉ nhập kí tự [a-zA-Z_0-9] tối đa 50 kí tự" >
+        </div>
+      <div *ngIf="f.categoryName.dirty || f.categoryName.touched">
+        <div *ngIf="f.categoryName.errors">
+          <span class="err" *ngIf="f.categoryName.errors.required">Bạn chưa nhập gì </span>
+          <span class="err" *ngIf="f.categoryName.errors.pattern">Nhập sai định dạng cho phép</span>
+          <span class="err" *ngIf="f.categoryName.errors.maxlength">Nhập quá kí cho phép </span>
+        </div>
+      </div>
+  
+      <div style="margin-top:10px" class="modal-body-content">
+        <span style="font-weight: bold;">Image</span>
+        <input type="file" class="form-control" (change)="onFileChange($event)" formControlName="fileImage" style="margin:10px 0;border-radius: 3px;" >
+      </div>
+  
+      <div class="modal-footer">
+        <button type="submit"  class="btn btn-primary" data-dismiss="modal">Thêm mới</button>
+      </div>
+    </form>
+    </div>
+  
